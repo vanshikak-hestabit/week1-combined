@@ -1,21 +1,42 @@
 #!/bin/bash
 
-LOG_FILE="validate.log"
-touch $LOG_FILE
-
-if test -d "src/"; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - src/ directory exists" >> $LOG_FILE
-else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: src/ directory is missing" >> $LOG_FILE
-    exit 1
+# Check if the src/ directory exists
+if [ ! -d "src" ]; then
+  echo "'src/' directory is missing."
+  exit 1
 fi
 
-if jq . config.json >/dev/null 2>&1; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - config.json is valid" >> $LOG_FILE
-else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: config.json is invalid" >> $LOG_FILE
-    exit 1
+# Check if config.json exists
+if [ ! -f "config.json" ]; then
+  echo "'config.json' file is missing."
+  exit 1
 fi
 
-echo "$(date '+%Y-%m-%d %H:%M:%S') - Validation successful" >> $LOG_FILE
-exit 0
+# Validate that config.json is a valid JSON file
+if ! jq empty config.json >/dev/null 2>&1; then
+  echo "'config.json' is not valid JSON."
+  exit 1
+fi
+
+echo "All checks passed!"#!/bin/bash
+
+# Check if the src/ directory exists
+if [ ! -d "src" ]; then
+  echo "'src/' directory is missing."
+  exit 1
+fi
+
+# Check if config.json exists
+if [ ! -f "config.json" ]; then
+  echo "'config.json' file is missing."
+  exit 1
+fi
+
+# Validate that config.json is a valid JSON file
+if ! jq empty config.json >/dev/null 2>&1; then
+  echo "'config.json' is not valid JSON."
+  exit 1
+fi
+
+echo "All checks passed!"
+
